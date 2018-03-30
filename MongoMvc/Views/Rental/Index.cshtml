@@ -1,14 +1,26 @@
-﻿@model IEnumerable<MongoMvc.Models.ViewModels.RentalViewModel>
+﻿@model IEnumerable<MongoMvc.POCOs.Rental>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+
+
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+
+<form action="/Rental/Index">
+    <div class="form-group">
+        <div class="col-md-4">
+            <input type="search" class="form-control"  placeholder="please search rental"/>
+        </div>
+        <input type="submit" class=" btn btn-info" value="Search" />
+    </div>
+</form>
+
 <table class="table">
     <tr>
           @*<th>

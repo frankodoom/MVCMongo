@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace MongoMvc.POCOs
 {
     public class Rental
     {
-        public string _id { get; set; }
+        [BsonId]
+        public ObjectId _id { get; set; }
         public string Description { get; set; }
         public int NumberOfRooms { get; set; }
         public List<string> Address = new List<string>();

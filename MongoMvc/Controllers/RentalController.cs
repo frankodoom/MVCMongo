@@ -15,29 +15,23 @@ namespace MongoMvc.Controllers
     public class RentalController : Controller
     {
         // GET: Rental
-        public async System.Threading.Tasks.Task<ActionResult> IndexAsync()
+        public async Task<ActionResult> Index()
         {
             using (var _context = new MongoContext())
             {
-                // var data = await _context.Rentals.Find(new BsonDocument()).ToListAsync();
-                var data = await _context.Rentals.Find(new BsonDocument()).ToListAsync();
-                return View();
+                var rentals = await _context.Rentals.Find(new BsonDocument()).Project<Rental>(Builders<Rental>.Projection.Exclude(r => r._id)).ToListAsync();
+
+                return View(rentals);
             }
         }
 
 
-        public async Task<ActionResult> Create()
+        //Create A Rental View Form
+        public ActionResult Create()
         {
-            using(var _context = new MongoContext())
-            {
-                //var rentals = _context.Rentals.Find(new BsonDocument()).Project<Rental>(Builders<Rental>.Projection.Exclude(r => r.Description));
 
-                var rentals = await _context.Rentals.Find(new BsonDocument()).Project<Rental>(Builders<Rental>.Projection.Exclude(r => r._id)).ToListAsync();
-
-
-                return View(rentals);
-            }
-           
+            return View();
+                 
         }
 
         [HttpPost]
@@ -48,6 +42,7 @@ namespace MongoMvc.Controllers
             {
                 var rental = new Rental()
                 {
+                    _id = ObjectId.Empty,
                     Address = (model.Address ?? string.Empty).Split('\n').ToList(),
                     Description = model.Description,
                     NumberOfRooms = model.NumberOfRooms,
@@ -55,9 +50,8 @@ namespace MongoMvc.Controllers
                 };
                await  _context.Rentals.InsertOneAsync(rental);
             }
-           
-            
-            return View("Index");
+                  
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -73,7 +67,7 @@ namespace MongoMvc.Controllers
                     NumberOfRooms = model.NumberOfRooms,
                     Price = model.Price
                 };
-                await _context.Rentals.UpdateOneAsync(new BsonDocument(),rental, null);
+                await _context.Rentals.InsertOneAsync(rental);
             }
 
 
