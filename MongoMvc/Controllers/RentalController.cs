@@ -36,7 +36,10 @@ namespace MongoMvc.Controllers
             }
             using (var _context = new MongoContext())
             {
-                var rentals = await _context.Rentals.Find(new BsonDocument()).Project<Rental>(Builders<Rental>.Projection.Exclude(r => r._id)).ToListAsync();
+                var rentals = await _context.Rentals.Find(new BsonDocument()).Project<Rental>(Builders<Rental>.Projection.Exclude(r => r.id))
+                    .SortBy(r=>r.Price) //defult Ascending
+                    .ThenByDescending(s=>s.NumberOfRooms) //perform another sort on another field
+                    .ToListAsync();
 
                 return View(rentals);
             }
@@ -59,36 +62,47 @@ namespace MongoMvc.Controllers
             {
                 var rental = new Rental()
                 {
-                    _id = ObjectId.Empty,
-                    Address = (model.Address ?? string.Empty).Split('\n').ToList(),
-                    Description = model.Description,
-                    NumberOfRooms = model.NumberOfRooms,
-                    Price = model.Price
-                };
-               await  _context.Rentals.InsertOneAsync(rental);
-            }
-                  
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Update(RentalViewModel model)
-        {
-            using (var _context = new MongoContext())
-            {
-                var rental = new Rental()
-                {
                     Address = (model.Address ?? string.Empty).Split('\n').ToList(),
                     Description = model.Description,
                     NumberOfRooms = model.NumberOfRooms,
                     Price = model.Price
                 };
                 await _context.Rentals.InsertOneAsync(rental);
+              
             }
+                  
+            return RedirectToAction("Index");
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Update(string id,  RentalViewModel model)
+        //{
+        //    using (var _context = new MongoContext())
+        //    {
+        //        var rental = new Rental()
+        //        {
+        //            Address = (model.Address ?? string.Empty).Split('\n').ToList(),
+        //            Description = model.Description,
+        //            NumberOfRooms = model.NumberOfRooms,
+        //            Price = model.Price
+        //        };
+        //        await _context.Rentals.UpdateOne(r=>r.id == id, rental);
+        //    }
 
 
-            return View("Index");
+        //    return View("Index");
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(string id)
+        {
+          using (var context = new MongoContext())
+           {
+            await context.Rentals.DeleteOneAsync(r => r.id == id);
+                return RedirectToAction("Index");
+           }
         }
     }
 }
