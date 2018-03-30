@@ -15,8 +15,25 @@ namespace MongoMvc.Controllers
     public class RentalController : Controller
     {
         // GET: Rental
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(decimal ? search)
         {
+            //Filter By Price
+            if (search > 0)
+            {
+                using (var _context = new MongoContext())
+                {
+                    //Greater or Equal TO
+                    //var rentals = await _context.Rentals.Find(Builders<Rental>.Filter.Gte(r => r.Price, search)).ToListAsync();
+
+                    //Less Than Or Equal To
+                    //var rentals = await _context.Rentals.Find(Builders<Rental>.Filter.Lte(r => r.Price, search)).ToListAsync();
+
+                    var rentals = await _context.Rentals.Find(Builders<Rental>.Filter.Where(r => r.Price ==search)).ToListAsync();
+
+                    return View(rentals);
+                }
+
+            }
             using (var _context = new MongoContext())
             {
                 var rentals = await _context.Rentals.Find(new BsonDocument()).Project<Rental>(Builders<Rental>.Projection.Exclude(r => r._id)).ToListAsync();
