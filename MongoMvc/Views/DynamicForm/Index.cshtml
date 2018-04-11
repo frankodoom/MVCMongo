@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<form action="/DynamicForm/PostDynamic" method="post">
+    @Html.AntiForgeryToken()
+    @*<label for="FirstName">What is Your First Name?</label>
+        <input type="text" name="FirstName" value="Frank" />
+        <label for="MiddleName">What is Your Middle Name?</label>
+        <input type="text" name="MiddleName" value="Arkhurst" />
+        <label for="LastName">What is Your Last Name?</label>
+        <input type="text" name="LastName" value="Odoom" />
+        <label for="Phone">What is Your Phone Number?</label>
+        <input type="text" name="Phone" value="0266275605 " />
+        <label for="Email">What is Your Email?</label>
+        <input type="text" name="Email" value="f.odoom@outlook.com" />*@
+
+    <input type="text" name="What is Your First Name?" value="Frank" />
+    <input type="text" name="What is Your Middle Name?" value="Arkhurst" />
+    <input type="text" name="What is Your Last Name?" value="Odoom" />
+    <input type="text" name="What is Your Phone Number?" value="0266275605 " />
+    <input type="text" name="What is Your Email?" value="f.odoom@outlook.com" />
+    <input type="text" name="Where do you live?" value="Awoshie" />
+    <input type="text" name="What is your Favourite Colour?" value="Red" />
+
+    <!--Radio Inputs-->
+    <input type="radio" name="Gender" value="Male" />
+    <input type="radio" name="Gender" value="Female" />
+    <!--Select Inputs-->
+    <select name="What course are you offering">
+        <option>DBC</option>
+        <option>FSD</option>
+        <option>WAD</option>
+    </select>
+    <!--Check Options-->
+    <input type="checkbox" name="What Programming Language Do You Write?" value="C#" />
+    <input type="checkbox" name="What Programming Language Do You Write?" value="F#" />
+    <input type="checkbox" name="What Programming Language Do You Write?" value="Java" />
+    <input type="checkbox" name="What Programming Language Do You Write?" value="Python" />
+    <input type="checkbox" name="What Programming Language Do You Write?" value="Ruby" />
+
+    <br />
+    <br />
+    <button type="submit" class="btn btn-info">
+        Post
+    </button>
+</form>
+
